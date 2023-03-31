@@ -25,4 +25,9 @@ public class CardController {
     public ResponseEntity<?> getAllCardsByType(@RequestParam(name = "type") String type) {
         return ResponseEntity.ok(cardRepository.findAllByType(type));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getCardById(@PathVariable Integer id){
+        return ResponseEntity.ok(cardRepository.findById(id));
+    }
 }
