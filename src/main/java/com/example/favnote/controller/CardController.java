@@ -1,6 +1,9 @@
 package com.example.favnote.controller;
 
 import com.example.favnote.repository.CardRepository;
+import com.example.favnote.repository.type.VArticleRepository;
+import com.example.favnote.repository.type.VNoteRepository;
+import com.example.favnote.repository.type.VTwitterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,10 +13,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping( "/card")
 public class CardController {
     private final CardRepository cardRepository;
+    private final VArticleRepository vArticleRepository;
+    private final VTwitterRepository vTwitterRepository;
+    private final VNoteRepository vNoteRepository;
 
     @Autowired
-    public CardController(CardRepository cardRepository) {
+    public CardController(CardRepository cardRepository, VArticleRepository vArticleRepository, VTwitterRepository vTwitterRepository, VNoteRepository vNoteRepository) {
         this.cardRepository = cardRepository;
+        this.vArticleRepository = vArticleRepository;
+        this.vTwitterRepository = vTwitterRepository;
+        this.vNoteRepository = vNoteRepository;
     }
 
     @GetMapping("/all")
@@ -23,11 +32,25 @@ public class CardController {
 
     @GetMapping(value = "/all", params = {"type"})
     public ResponseEntity<?> getAllCardsByType(@RequestParam(name = "type") String type) {
-        return ResponseEntity.ok(cardRepository.findAllByType(type));
+        switch (type){
+            case "article":
+                return ResponseEntity.ok(vArticleRepository.findAll());
+            case "note":
+                return ResponseEntity.ok(vNoteRepository.findAll());
+            case "twitter":
+                return ResponseEntity.ok(vTwitterRepository.findAll());
+        }
+        return (ResponseEntity<?>) ResponseEntity.status(400);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCardById(@PathVariable Integer id){
         return ResponseEntity.ok(cardRepository.findById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCardFromId(@PathVariable Integer id){
+        cardRepository.deleteById(id);
+        return ResponseEntity.ok("Deleted card " + id);
     }
 }
