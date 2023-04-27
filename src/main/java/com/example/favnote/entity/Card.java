@@ -2,16 +2,16 @@ package com.example.favnote.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "card")
-@Setter
 @Getter
-@RequiredArgsConstructor
+@Setter
+@NoArgsConstructor
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Card {
     @Column(name = "article_url", length = 2083)
     private String articleUrl;
 
-    @Column(name = "created")
-    private Date created;
+    @Column(name = "created", nullable = false)
+    private LocalDate created = LocalDate.now();
 
 }

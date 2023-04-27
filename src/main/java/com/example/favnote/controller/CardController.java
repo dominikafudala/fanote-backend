@@ -1,9 +1,11 @@
 package com.example.favnote.controller;
 
+import com.example.favnote.model.CardModel;
 import com.example.favnote.repository.CardRepository;
 import com.example.favnote.repository.type.VArticleRepository;
 import com.example.favnote.repository.type.VNoteRepository;
 import com.example.favnote.repository.type.VTwitterRepository;
+import com.example.favnote.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +19,15 @@ public class CardController {
     private final VTwitterRepository vTwitterRepository;
     private final VNoteRepository vNoteRepository;
 
+    private final CardService cardService;
+
     @Autowired
-    public CardController(CardRepository cardRepository, VArticleRepository vArticleRepository, VTwitterRepository vTwitterRepository, VNoteRepository vNoteRepository) {
+    public CardController(CardRepository cardRepository, VArticleRepository vArticleRepository, VTwitterRepository vTwitterRepository, VNoteRepository vNoteRepository, CardService cardService) {
         this.cardRepository = cardRepository;
         this.vArticleRepository = vArticleRepository;
         this.vTwitterRepository = vTwitterRepository;
         this.vNoteRepository = vNoteRepository;
+        this.cardService = cardService;
     }
 
     @GetMapping("/all")
@@ -53,4 +58,10 @@ public class CardController {
         cardRepository.deleteById(id);
         return ResponseEntity.ok("Deleted card " + id);
     }
+
+    @PostMapping("/newitem")
+    public ResponseEntity<?> addNewItem(@RequestBody CardModel cardModel) {
+        return ResponseEntity.ok(cardService.addNewCard(cardModel));
+    }
+
 }

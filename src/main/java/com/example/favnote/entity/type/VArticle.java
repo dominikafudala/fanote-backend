@@ -1,5 +1,6 @@
 package com.example.favnote.entity.type;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Immutable;
 
@@ -35,6 +36,7 @@ public class VArticle {
     @Column(name = "created", nullable = false)
     private LocalDate created;
 
+    @JsonProperty("id")
     public Integer getCardId() {
         return id;
     }
