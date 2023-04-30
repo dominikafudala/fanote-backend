@@ -39,9 +39,9 @@ public class UserController {
     @GetMapping("/check")
     public ResponseEntity<?> checkCredentials(@RequestParam("token") String token) {
         if(userService.checkCredentials(token))
-            return ResponseEntity.ok("ok");
+            return ResponseEntity.ok(true);
         else
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(false);
     }
 
 }
